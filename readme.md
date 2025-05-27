@@ -25,4 +25,4 @@ This is what I got after running the above lines in the console.
 
 In comparison, I also did the same for the REST service using Apache Benchmarking.
 
-    ab -n 100 -c 10 http://localhost:5000/items/1
+    ab -n 100 http://localhost:5000/items/1
