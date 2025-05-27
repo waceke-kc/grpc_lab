@@ -15,6 +15,7 @@ In order to containerize the server, the Dockerfile can be built and run  using 
 
 #### Testing
 The testing for the grpc code was done using ghz. After running  
+
     ghz -n 100 --insecure \
     --proto myitems.proto \
     --call myitems.ItemService.GetItemById \

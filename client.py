@@ -1,21 +1,25 @@
 import grpc
 import myitems_pb2 as pb2
 import myitems_pb2_grpc as pb2_grpc
+import logging
+import time
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def run():
     channel = grpc.insecure_channel("localhost:50051", options=(('grpc.enable_http_proxy', 0),))
+    logging.info("Connecting to gRPC server at localhost:50051")
     stub = pb2_grpc.ItemServiceStub(channel)
     # 1. Unary call
 
     response = stub.GetItemById(pb2.ItemRequest(id=1))
-    print("Unary response:", response)
+    logging.info("Unary response: %s", response)
 
     # 2. Server-streaming
     # items = stub.ListAllItems(pb2.Empty())
     # Call stub.ListAllItems() and print the responses
     for item in stub.ListAllItems(pb2.Empty()):
-        print("Server-streaming item:", item)
+        logging.info("Server-streaming item: %s", item)
 
     names = ["Moodle", "Student Services", "WebUntis", " Student Mail"]
 
@@ -26,12 +30,17 @@ def run():
     # Create an iterator of ItemRequest messages
     # Then call stub.AddItems(...) and capture the final result
     response = stub.AddItems(name_generator())
-    print("Client-streaming response. The new items count is:", response.total_count)
+    logging.info("Client-streaming response: %s", response)
+
+    # Print the total count of items added
+    logging.info("Client-streaming response. The new items count is: %d", response.total_count)
+  
 
     # 4. Bidirectional
     # Open a stub.ChatAboutItems() stream
     # Send ChatMessage objects and read responses in a loop
     def chat_generator():
+        logging.info("Starting bidirectional chat stream")
         for name in names:
             print("Sending chat message:", name)
             # Create a ChatMessage object and send it
@@ -39,7 +48,8 @@ def run():
     # Call stub.ChatAboutItems() and print the responses
     response = stub.ChatAboutItems(chat_generator())
     for message in response:
-        print("Bidirectional response:", message.content)
+        logging.info("Bidirectional response: %s", message.content)
+  
     # 5. Error handling
 
 
