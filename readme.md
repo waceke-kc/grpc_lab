@@ -21,7 +21,6 @@ The testing for the gRPC code was done using ghz. After running
     --call myitems.ItemService.GetItemById \
     -d '{"id": 1}' \
     localhost:50051
-This is what I got after running the above lines in the console. 
 
 In comparison, I also did the same for the REST service using Apache Benchmarking.
 
